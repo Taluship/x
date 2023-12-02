@@ -46,7 +46,7 @@ func initLogger() {
 	)
 
 	Logger = zap.New(core)
-	Logger = Logger.WithOptions(zap.AddCallerSkip(1))
+	Logger = Logger.WithOptions(zap.AddCaller())
 }
 
 func Debugf(format string, a ...any) {
