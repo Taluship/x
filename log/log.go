@@ -49,6 +49,14 @@ func initLogger() {
 	Logger = Logger.WithOptions(zap.AddCaller())
 }
 
+func Debug(message string) {
+	Logger.Debug(message)
+}
+
+func Info(message string) {
+	Logger.Info(message)
+}
+
 func Debugf(format string, a ...any) {
 	Logger.Debug(fmt.Sprintf(format, a...))
 }
