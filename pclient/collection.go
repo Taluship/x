@@ -1,5 +1,12 @@
 package pclient
 
+import (
+	"fmt"
+	"net/url"
+)
+
+type CollectionIdOrName string
+
 type Schema struct {
 	System   bool   `json:"system"`
 	Id       string `json:"id"`
@@ -34,14 +41,93 @@ type CollectionResponse struct {
 	Indexes    []string    `json:"indexes"`
 }
 
-// ListCollection list/search collection
-func (c *Client) ListCollection() {
+type ListCollectionParams struct {
+	Page      int
+	PerPage   int
+	Sort      string
+	Filter    string
+	Fields    string
+	SkipTotal bool
+}
 
+type ViewCollectionParams struct {
+	Fields string
+}
+
+// ListCollection list/search collection
+func (c *Client) ListCollection(params ListCollectionParams) (PaginationResponse[CollectionResponse], error) {
+	var data = PaginationResponse[CollectionResponse]{
+		Items:      []*CollectionResponse{},
+		Page:       0,
+		PerPage:    0,
+		TotalItems: 0,
+		TotalPages: 0,
+	}
+
+	u, err := url.Parse("/api/collections/")
+	if err != nil {
+		return data, err
+	}
+
+	q := u.Query()
+	if params.Page != 0 {
+		q.Set("page", fmt.Sprintf("%d", params.Page))
+	}
+	if params.PerPage != 0 {
+		q.Set("perPage", fmt.Sprintf("%d", params.PerPage))
+	}
+	if params.Sort != "" {
+		q.Set("sort", params.Sort)
+	}
+	if params.Filter != "" {
+		q.Set("filter", params.Filter)
+	}
+	if params.Fields != "" {
+		q.Set("fields", params.Fields)
+	}
+	if params.SkipTotal {
+		q.Set("skipTotal", fmt.Sprintf("%t", params.SkipTotal))
+	}
+	u.RawQuery = q.Encode()
+
+	resp, err := c.get(u.String())
+	if err != nil {
+		return data, err
+	}
+
+	err = c.decode(resp, &data)
+	if err != nil {
+		return data, err
+	}
+
+	return data, nil
 }
 
 // ViewCollection view collection
-func (c *Client) ViewCollection() {
+func (c *Client) ViewCollection(arg CollectionIdOrName, params ViewCollectionParams) (*CollectionResponse, error) {
+	u, err := url.Parse("/api/collections/" + string(arg))
+	if err != nil {
+		return nil, err
+	}
 
+	q := u.Query()
+	if params.Fields != "" {
+		q.Set("fields", params.Fields)
+	}
+	u.RawQuery = q.Encode()
+
+	resp, err := c.get(u.String())
+	if err != nil {
+		return nil, err
+	}
+
+	var data = new(CollectionResponse)
+	err = c.decode(resp, &data)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
 
 // CreateCollection create collection

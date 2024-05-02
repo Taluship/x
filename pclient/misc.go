@@ -10,7 +10,7 @@ type HealthResponse struct {
 }
 
 func (c *Client) Health() (*HealthResponse, error) {
-	resp, err := c.get(HealthPath)
+	resp, err := c.get("/api/health")
 	if err != nil {
 		return nil, err
 	}
