@@ -68,7 +68,7 @@ func TestParseResponseMapToStruct(t *testing.T) {
 	}
 
 	target := &CrawlTarget{}
-	if err := ParseResponseMapToStruct(data, target); err != nil {
+	if err := ResponseMapToObject(data, target); err != nil {
 		t.Error(err)
 		return
 	}

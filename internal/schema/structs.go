@@ -30,5 +30,5 @@ type CrawlTarget struct {
 	Selector  string `json:"selector"`
 	Type      string `json:"type"`
 	LastCrawl string `json:"last_crawl"`
-	IsActive  string `json:"is_active"`
+	IsActive  bool   `json:"is_active"`
 }

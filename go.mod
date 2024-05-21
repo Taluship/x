@@ -3,6 +3,7 @@ module github.com/taluship/x
 go 1.21.9
 
 require (
+	github.com/mitchellh/mapstructure v1.5.0
 	github.com/pocketbase/pocketbase v0.22.12
 	github.com/stretchr/testify v1.9.0
 	github.com/zcharym/pocketbase-client v0.0.0-20240518054039-3f81c40639a3
@@ -41,6 +42,7 @@ require (
 	github.com/go-resty/resty/v2 v2.13.1 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
+	github.com/google/generative-ai-go v0.12.0 // indirect
 	github.com/googleapis/gax-go/v2 v2.12.4 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

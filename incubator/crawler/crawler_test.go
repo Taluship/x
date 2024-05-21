@@ -2,18 +2,17 @@ package crawler
 
 import (
 	"testing"
-
-	"github.com/pluja/pocketbase"
-	"github.com/taluship/x/internal/schema"
 )
 
 func TestCrawler_APIClient(t *testing.T) {
-	c := pocketbase.NewClient("http://127.0.0.1:8090", pocketbase.WithAdminEmailPassword("zcharyma@gmail.com", "Admin@1234"))
+	c := NewCrawlerClient()
 
-	list2, err := c.List(schema.CollectionTarget, pocketbase.ParamsList{})
+	targets, err := c.FetchTargets()
 	if err != nil {
+		t.Error(err)
 		return
 	}
-
-	t.Logf("List: %+v", list2)
+	for _, target := range targets {
+		t.Logf("Target: %+v", target)
+	}
 }

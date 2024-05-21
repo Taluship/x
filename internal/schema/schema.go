@@ -2,9 +2,9 @@
 package schema
 
 import (
-	"errors"
 	"unicode"
 
+	"github.com/mitchellh/mapstructure"
 	"github.com/pocketbase/pocketbase/models/schema"
 )
 
@@ -63,6 +63,8 @@ func ConvertType(typ string) string {
 		return "string"
 	case "select":
 		return "string"
+	case "bool":
+		return "bool"
 	case "editor":
 		return "string"
 	case "url":
@@ -74,8 +76,18 @@ func ConvertType(typ string) string {
 	}
 }
 
-func ParseResponseMapToStruct(response map[string]any, object any) error {
-	var ErrParsing = errors.New("failed to parse response map to struct")
+func ResponseMapToObject(response map[string]any, object any) error {
+	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
+		Result:  object,
+		TagName: "json",
+	})
 
-	return ErrParsing
+	if err != nil {
+		return err
+	}
+
+	if err := decoder.Decode(response); err != nil {
+		return err
+	}
+	return nil
 }
