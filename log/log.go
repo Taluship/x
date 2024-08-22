@@ -3,6 +3,7 @@ package log
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"go.uber.org/zap"
@@ -46,7 +47,7 @@ func initLogger() {
 	)
 
 	Logger = zap.New(core)
-	Logger = Logger.WithOptions(zap.AddCaller())
+	Logger = Logger.WithOptions(zap.AddCaller(), zap.AddCallerSkip(1))
 }
 
 func Debug(message string) {
@@ -71,4 +72,14 @@ func Warnf(format string, a ...any) {
 
 func Errorf(format string, a ...any) {
 	Logger.Error(fmt.Sprintf(format, a...))
+}
+
+func ProfileLogf(start time.Time, format string, a ...any) {
+	elapsed := time.Since(start)
+	message := strings.Join([]string{
+		fmt.Sprintf(format, a...),
+		fmt.Sprintf("time elapsed: %s", elapsed)},
+		" | ",
+	)
+	Logger.Info(message)
 }
