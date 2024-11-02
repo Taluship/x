@@ -58,6 +58,10 @@ func Info(message string) {
 	Logger.Info(message)
 }
 
+func Error(err error) {
+	Logger.Error(err.Error())
+}
+
 func Debugf(format string, a ...any) {
 	Logger.Debug(fmt.Sprintf(format, a...))
 }

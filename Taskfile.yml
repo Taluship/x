@@ -2,5 +2,10 @@ version: '3'
 
 tasks:
   default:
-    cmds:
+    preconditions:
       - go mod tidy
+    cmds:
+      - go run ./... serve
+  generate:
+    cmds:
+      - go generate ./...
